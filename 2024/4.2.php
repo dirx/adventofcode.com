@@ -2,25 +2,31 @@
 
 declare(strict_types=1);
 
+include(__DIR__ . "/utils.php");
+
 /**
  * https://adventofcode.com/2024/day/4
  *
  * strategy: at row/column search for all 4 variants by using a "half" word offset, 2 matches = found
  */
 
-$puzzle = file_get_contents(__DIR__ . '/4.txt');
-//$puzzle = <<<PUZZLE
-//    MMMSXXMASM
-//    MSAMXMSMSA
-//    AMXSXMAAMM
-//    MSAMASMSMX
-//    XMASAMXAMM
-//    XXAMMXXAMA
-//    SMSMSASXSS
-//    SAXAMASAAA
-//    MAMMMXMMMM
-//    MXMXAXMASX
-//    PUZZLE;
+if (Console::isTest()) {
+    $puzzle = <<<PUZZLE
+        MMMSXXMASM
+        MSAMXMSMSA
+        AMXSXMAAMM
+        MSAMASMSMX
+        XMASAMXAMM
+        XXAMMXXAMA
+        SMSMSASXSS
+        SAXAMASAAA
+        MAMMMXMMMM
+        MXMXAXMASX
+        PUZZLE;
+} else {
+    $puzzle = file_get_contents(__DIR__ . '/4.txt');
+}
+
 $puzzleIndex = [];
 foreach (explode("\n", $puzzle) as $i => $line) {
     $puzzleIndex[] = preg_split("//", trim($line), flags: PREG_SPLIT_NO_EMPTY);
@@ -88,20 +94,18 @@ for ($row = 0; $row < $puzzleRows; $row++) {
         }
         if (count($results) === 2) {
             $found[] = $results;
-            echo sprintf(
-                'found %s at row %s, column %s in direction %s and %s.' . PHP_EOL,
-                $word,
-                $row + 1,
-                $column + 1,
-                $directionName($results[0]['direction']),
-                $directionName($results[1]['direction']),
+            Console::v(
+                sprintf(
+                    'found %s at row %s, column %s in direction %s and %s.',
+                    $word,
+                    $row + 1,
+                    $column + 1,
+                    $directionName($results[0]['direction']),
+                    $directionName($results[1]['direction']),
+                ),
             );
         }
     }
 }
 
-echo sprintf(
-    'Found X-%s %d times' . PHP_EOL,
-    $word,
-    count($found),
-);
+Console::l(sprintf('found X-%s %d times', $word, count($found)));

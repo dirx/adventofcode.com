@@ -2,21 +2,27 @@
 
 declare(strict_types=1);
 
+include(__DIR__ . "/utils.php");
+
 /**
  * https://adventofcode.com/2024/day/2
  *
  * strategy: check all levels and all variations with one level less, if safe count and next report, else unsafe and next report.
  */
 
-$puzzle = file_get_contents(__DIR__ . '/2.txt');
-//$puzzle = <<<PUZZLE
-//    7 6 4 2 1
-//    1 2 7 8 9
-//    9 7 6 2 1
-//    1 3 2 4 5
-//    8 6 4 4 1
-//    1 3 6 7 9
-//    PUZZLE;
+if (Console::isTest()) {
+    $puzzle = <<<PUZZLE
+        7 6 4 2 1
+        1 2 7 8 9
+        9 7 6 2 1
+        1 3 2 4 5
+        8 6 4 4 1
+        1 3 6 7 9
+        PUZZLE;
+} else {
+    $puzzle = file_get_contents(__DIR__ . '/2.txt');
+}
+
 $reports = [];
 $right = [];
 foreach (explode("\n", $puzzle) as $i => $line) {
@@ -37,25 +43,13 @@ $rulesMissed = function (int $diff, int|null $lastDiff): bool {
 };
 
 $checkLevels = function (array $levels, Closure $rulesMissed): bool {
-    echo sprintf(
-        '- check levels: %s' . PHP_EOL,
-        implode(',', $levels),
-    );
+    Console::vv(sprintf('check levels: %s', implode(',', $levels)));
     $lastDiff = null;
     for ($i = 0; $i < count($levels) - 1; $i++) {
         $diff = $levels[$i] - $levels[$i + 1];
-        echo sprintf(
-            '  - compare %s to %s: %s' . PHP_EOL,
-            $levels[$i],
-            $levels[$i + 1],
-            $diff,
-        );
+        Console::vvv(sprintf('compare %s to %s: %s', $levels[$i], $levels[$i + 1], $diff));
         if ($rulesMissed($diff, $lastDiff)) {
-            echo sprintf(
-                '  - unsafe %s to %s' . PHP_EOL,
-                $levels[$i],
-                $levels[$i + 1],
-            );
+            Console::vv(sprintf('- unsafe %s to %s', $levels[$i], $levels[$i + 1]));
 
             return false;
         }
@@ -68,15 +62,11 @@ $checkLevels = function (array $levels, Closure $rulesMissed): bool {
 
 $safe = 0;
 foreach ($reports as $r => $levels) {
-    echo sprintf(
-        'report %s: %s' . PHP_EOL,
-        $r,
-        implode(',', $levels),
-    );
+    Console::v(sprintf('report %s: %s', $r, implode(',', $levels)));
 
     if ($checkLevels($levels, $rulesMissed)) {
         $safe++;
-        echo sprintf('- safe' . PHP_EOL);
+        Console::v('- safe');
         continue;
     }
 
@@ -85,16 +75,12 @@ foreach ($reports as $r => $levels) {
         array_splice($levelsRemoved, $i, 1);
         if ($checkLevels($levelsRemoved, $rulesMissed)) {
             $safe++;
-            echo sprintf('- safe' . PHP_EOL);
+            Console::v('- safe');
             continue 2;
         }
     }
 
-    echo sprintf('- unsafe' . PHP_EOL);
+    Console::v('- unsafe');
 }
 
-echo sprintf(
-    'found %s / %s safe reports' . PHP_EOL,
-    $safe,
-    count($reports),
-);
+Console::l(sprintf('found %s / %s safe reports', $safe, count($reports)));

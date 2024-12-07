@@ -2,21 +2,27 @@
 
 declare(strict_types=1);
 
+include(__DIR__ . "/utils.php");
+
 /**
  * https://adventofcode.com/2024/day/1
  *
  * strategy: each left value * with count in right, sum
  */
 
-$puzzle = file_get_contents(__DIR__ . '/1.txt');
-//$puzzle = <<<PUZZLE
-//    3   4
-//    4   3
-//    2   5
-//    1   3
-//    3   9
-//    3   3
-//    PUZZLE;
+if (Console::isTest()) {
+    $puzzle = <<<PUZZLE
+        3   4
+        4   3
+        2   5
+        1   3
+        3   9
+        3   3
+        PUZZLE;
+} else {
+    $puzzle = file_get_contents(__DIR__ . '/1.txt');
+}
+
 $left = [];
 $right = [];
 foreach (explode("\n", $puzzle) as $i => $line) {
@@ -36,7 +42,4 @@ for ($i = 0; $i < count($left); $i++) {
     $similarity[] = $left[$i] * $found;
 }
 
-echo sprintf(
-    'the similarity is %s.' . PHP_EOL,
-    array_sum($similarity),
-);
+Console::l(sprintf('the similarity is %s', array_sum($similarity)));

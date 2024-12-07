@@ -2,25 +2,31 @@
 
 declare(strict_types=1);
 
+include(__DIR__ . "/utils.php");
+
 /**
  * https://adventofcode.com/2024/day/4
  *
  * strategy: at row/column search in directions up, right-up, right, right-down for the forward word and in the other 4 directions for the backward word
  */
 
-$puzzle = file_get_contents(__DIR__ . '/4.txt');
-//$puzzle = <<<PUZZLE
-//    MMMSXXMASM
-//    MSAMXMSMSA
-//    AMXSXMAAMM
-//    MSAMASMSMX
-//    XMASAMXAMM
-//    XXAMMXXAMA
-//    SMSMSASXSS
-//    SAXAMASAAA
-//    MAMMMXMMMM
-//    MXMXAXMASX
-//    PUZZLE;
+if (Console::isTest()) {
+    $puzzle = <<<PUZZLE
+        MMMSXXMASM
+        MSAMXMSMSA
+        AMXSXMAAMM
+        MSAMASMSMX
+        XMASAMXAMM
+        XXAMMXXAMA
+        SMSMSASXSS
+        SAXAMASAAA
+        MAMMMXMMMM
+        MXMXAXMASX
+        PUZZLE;
+} else {
+    $puzzle = file_get_contents(__DIR__ . '/4.txt');
+}
+
 $puzzleIndex = [];
 foreach (explode("\n", $puzzle) as $i => $line) {
     $puzzleIndex[] = preg_split("//", trim($line), flags: PREG_SPLIT_NO_EMPTY);
@@ -80,12 +86,14 @@ for ($row = 0; $row < $puzzleRows; $row++) {
                 $result = $find($puzzleIndex, $word, [$row, $column], $searchDirection, $wordDirection);
                 if ($result !== null) {
                     $found[] = $result;
-                    echo sprintf(
-                        'found %s at row %s, column %s in direction %s.' . PHP_EOL,
-                        $word,
-                        $row,
-                        $column,
-                        $directionName($result['direction']),
+                    Console::v(
+                        sprintf(
+                            'found %s at row %s, column %s in direction %s.',
+                            $word,
+                            $row,
+                            $column,
+                            $directionName($result['direction']),
+                        ),
                     );
                 }
             }
@@ -93,8 +101,4 @@ for ($row = 0; $row < $puzzleRows; $row++) {
     }
 }
 
-echo sprintf(
-    'Found %s %d times' . PHP_EOL,
-    $word,
-    count($found),
-);
+Console::l(sprintf('found %s %d times', $word, count($found)));
