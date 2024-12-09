@@ -52,7 +52,7 @@ for ($row = 0; $row < count($map); $row++) {
     }
 }
 
-// calc differences and anti node pos
+// calc distance and anti node pos
 $distances = [];
 foreach ($nodes as $node => $nodePositions) {
     for ($i = 0; $i < count($nodePositions); $i++) {
