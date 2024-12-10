@@ -95,17 +95,15 @@ for ($row = 0; $row < $puzzleRows; $row++) {
         if (count($results) === 2) {
             $found[] = $results;
             Console::v(
-                sprintf(
-                    'found %s at row %s, column %s in direction %s and %s.',
-                    $word,
-                    $row + 1,
-                    $column + 1,
-                    $directionName($results[0]['direction']),
-                    $directionName($results[1]['direction']),
-                ),
+                'found %s at row %s, column %s in direction %s and %s.',
+                $word,
+                $row + 1,
+                $column + 1,
+                $directionName($results[0]['direction']),
+                $directionName($results[1]['direction']),
             );
         }
     }
 }
 
-Console::l(sprintf('found X-%s %d times', $word, count($found)));
+Console::l('found X-%s %d times', $word, count($found));

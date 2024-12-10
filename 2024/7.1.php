@@ -51,14 +51,14 @@ $operatorPermutations = function (array $operators, int $equationNumbersCount) u
             $operator = floor($j / (pow($operatorsCount, $equationOperatorsCount - $i - 1))) % ($operatorsCount);
             $permutation[] = $operators[$operator];
         }
-        Console::vvv(sprintf('permutation (%s/%s) %s', $j, $permutationsCount, implode(' ', $permutation)));
+        Console::vvv('permutation (%s/%s) %s', $j, $permutationsCount, implode(' ', $permutation));
         yield $permutation;
     }
 };
 
 $correctEquations = [];
 foreach ($equations as $equationId => [$sum, $numbers]) {
-    Console::v(sprintf('check equation %s: %s = %s', $equationId, $sum, implode(' ? ', $numbers)));
+    Console::v('check equation %s: %s = %s', $equationId, $sum, implode(' ? ', $numbers));
 
     $sumCandidates = [];
     $equationNumbersCount = count($numbers);
@@ -73,7 +73,7 @@ foreach ($equations as $equationId => [$sum, $numbers]) {
                 '+' => $sumCandidate + $numbers[$i],
             };
             if ($sumCandidate > $sum) {
-                Console::vv(sprintf('skip - too high: %s < %s = %s', $sum, $sumCandidate, implode(' ', $equation)));
+                Console::vv('skip - too high: %s < %s = %s', $sum, $sumCandidate, implode(' ', $equation));
                 continue 2;
             }
         }
@@ -88,18 +88,16 @@ foreach ($equations as $equationId => [$sum, $numbers]) {
                 ];
             }
 
-            Console::v(sprintf('> match: %s = %s', $sum, implode(' ', $equation)));
+            Console::v('> match: %s = %s', $sum, implode(' ', $equation));
         } elseif ($sumCandidate < $sum) {
-            Console::vv(sprintf('skip - too low: %s > %s = %s', $sum, $sumCandidate, implode(' ', $equation)));
+            Console::vv('skip - too low: %s > %s = %s', $sum, $sumCandidate, implode(' ', $equation));
         }
     }
 }
 
 Console::l(
-    sprintf(
-        'found %s / %s correct equations, total sum is %s',
-        array_reduce($correctEquations, fn($carry, $equation) => $carry + count($equation['equations']), 0),
-        count($equations),
-        array_reduce($correctEquations, fn($carry, $equation) => $carry + $equation['sum'], "0"),
-    ),
+    'found %s / %s correct equations, total sum is %s',
+    array_reduce($correctEquations, fn($carry, $equation) => $carry + count($equation['equations']), 0),
+    count($equations),
+    array_reduce($correctEquations, fn($carry, $equation) => $carry + $equation['sum'], "0"),
 );

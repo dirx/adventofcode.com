@@ -31,4 +31,4 @@ foreach ($validInstructions as $pattern => $callback) {
     preg_replace_callback($pattern, $callback, $instruction);
 }
 
-Console::l(sprintf('%s results found. sum is %s', count($results), array_sum($results)));
+Console::l('%s results found. sum is %s', count($results), array_sum($results));

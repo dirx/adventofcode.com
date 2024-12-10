@@ -32,7 +32,7 @@ for ($start = 0; $start < strlen($diskMap); $start++) {
         array_push($blocks, ...array_fill(0, (int)$diskMap[$start], $spaceChar));
     }
 }
-Console::vv(sprintf('blocks: %s', implode(' ', $blocks)));
+Console::vv('blocks: %s', implode(' ', $blocks));
 
 $start = 0;
 $end = count($blocks) - 1;
@@ -44,13 +44,11 @@ while ($start < $end) {
                 $blocks[$start] = $blocks[$i];
                 $blocks[$i] = $spaceChar;
                 Console::v(
-                    sprintf(
-                        'defragged (%s - %s): %s - %s ',
-                        $start,
-                        $end,
-                        implode(' ', array_slice($blocks, $start - 10, 20)),
-                        implode(' ', array_slice($blocks, $end - 10, 20)),
-                    ),
+                    'defragged (%s - %s): %s - %s ',
+                    $start,
+                    $end,
+                    implode(' ', array_slice($blocks, $start - 10, 20)),
+                    implode(' ', array_slice($blocks, $end - 10, 20)),
                 );
                 break;
             }
@@ -59,21 +57,9 @@ while ($start < $end) {
     }
 
     $checksum += $start * (int)$blocks[$start];
-    Console::v(
-        sprintf(
-            'calc: %s (%s) = %s',
-            $start,
-            $blocks[$start],
-            $checksum,
-        ),
-    );
+    Console::v('calc: %s (%s) = %s', $start, $blocks[$start], $checksum);
     $start++;
 }
 
-Console::vv(sprintf('defragged blocks: %s', implode(' ', $blocks)));
-Console::l(
-    sprintf(
-        'checksum is %s',
-        $checksum,
-    ),
-);
+Console::vv('defragged blocks: %s', implode(' ', $blocks));
+Console::l('checksum is %s', $checksum);

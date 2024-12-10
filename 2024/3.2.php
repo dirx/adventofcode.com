@@ -38,10 +38,10 @@ $validInstructions = [
         }
 
         if ($do) {
-            Console::v(sprintf('mul %s with %s', (int)$matches[2], (int)$matches[3]));
+            Console::v('mul %s with %s', (int)$matches[2], (int)$matches[3]);
             $results[] = (int)$matches[2] * (int)$matches[3];
         } else {
-            Console::vv(sprintf('ignore mul %s with %s', (int)$matches[2], (int)$matches[3]));
+            Console::vv('ignore mul %s with %s', (int)$matches[2], (int)$matches[3]);
         }
     },
 ];
@@ -50,4 +50,4 @@ foreach ($validInstructions as $pattern => $callback) {
     preg_replace_callback($pattern, $callback, $instruction);
 }
 
-Console::l(sprintf('%s results found. sum is %s', count($results), array_sum($results)));
+Console::l('%s results found. sum is %s', count($results), array_sum($results));

@@ -90,7 +90,7 @@ $turns = 0;
 while (true) {
     // mark pos as visited and count
     if ($map[$position[0]][$position[1]] !== $visited) {
-        Console::v(sprintf('Marked %s, %s as visited', $position[0], $position[1]));
+        Console::v('Marked %s, %s as visited', $position[0], $position[1]);
         $map[$position[0]][$position[1]] = $visited;
         $distinctPositions++;
     }
@@ -103,7 +103,7 @@ while (true) {
 
     // out of bounds? leave
     if ($nextPosition[0] < 0 || $nextPosition[1] < 0 || $nextPosition[0] > $mapSize[0] || $nextPosition[1] > $mapSize[1]) {
-        Console::v(sprintf('Left the map at %s, %s (map size %s, %s)', $position[0], $position[1], $mapSize[0], $mapSize[1]));
+        Console::v('Left the map at %s, %s (map size %s, %s)', $position[0], $position[1], $mapSize[0], $mapSize[1]);
         break;
     }
 
@@ -113,13 +113,11 @@ while (true) {
         $direction = $direction->turnRight();
         $turns++;
         Console::v(
-            sprintf(
-                'Obstacle at %s, %s: turned from %s to %s',
-                $nextPosition[0],
-                $nextPosition[1],
-                $oldDirection->name(),
-                $direction->name(),
-            ),
+            'Obstacle at %s, %s: turned from %s to %s',
+            $nextPosition[0],
+            $nextPosition[1],
+            $oldDirection->name(),
+            $direction->name(),
         );
         continue;
     }
@@ -127,30 +125,21 @@ while (true) {
     // walk
     $position = $nextPosition;
     $steps++;
-    Console::v(sprintf('Walked to %s, %s', $position[0], $position[1]));
+    Console::v('Walked to %s, %s', $position[0], $position[1]);
 }
 
-Console::l(
-    sprintf(
-        'Walked %s steps, turned %s times, visited %s distinct positions.',
-        $steps,
-        $turns,
-        $distinctPositions,
-    ),
-);
+Console::l('Walked %s steps, turned %s times, visited %s distinct positions.', $steps, $turns, $distinctPositions);
 
 Console::vv(
-    sprintf(
-        <<<TEXT
-            The maaaaaap:
-            %s
-            TEXT,
-        implode(
-            PHP_EOL,
-            array_map(
-                fn($row) => implode('', $row),
-                $map,
-            ),
+    <<<TEXT
+        The maaaaaap:
+        %s
+        TEXT,
+    implode(
+        PHP_EOL,
+        array_map(
+            fn($row) => implode('', $row),
+            $map,
         ),
     ),
 );

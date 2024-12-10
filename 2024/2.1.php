@@ -42,12 +42,12 @@ $rulesMissed = function (int $diff, int|null $lastDiff): bool {
 
 $safe = 0;
 foreach ($reports as $r => $levels) {
-    Console::v(sprintf('report %s: %s', $r, implode(',', $levels)));
+    Console::v('report %s: %s', $r, implode(',', $levels));
     $lastDiff = null;
     for ($i = 1; $i < count($levels); $i++) {
         $diff = $levels[$i] - $levels[$i - 1];
         if ($rulesMissed($diff, $lastDiff)) {
-            Console::v(sprintf('- unsafe %s to %s', $levels[$i - 1], $levels[$i]));
+            Console::v('- unsafe %s to %s', $levels[$i - 1], $levels[$i]);
             continue 2;
         }
 
@@ -57,4 +57,4 @@ foreach ($reports as $r => $levels) {
     $safe++;
 }
 
-Console::l(sprintf('found %s / %s safe reports', $safe, count($reports)));
+Console::l('found %s / %s safe reports', $safe, count($reports));

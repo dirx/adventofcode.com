@@ -60,38 +60,17 @@ foreach (explode("\n", $puzzle) as $i => $line) {
 function compare($a, $b, $orderRules, $level = 0): int
 {
     $indent = str_repeat(' ', $level * 2);
-    Console::v(
-        sprintf(
-            '%s- compare %s - %s',
-            $indent,
-            $a,
-            $b,
-        ),
-    );
+    Console::v('%s- compare %s - %s', $indent, $a, $b);
 
     $next = [];
     foreach ($orderRules as $rule) {
         if ($rule[0] === $a && $rule[1] === $b) {
-            Console::vv(
-                sprintf(
-                    '%s- found %s < %s',
-                    $indent,
-                    $a,
-                    $b,
-                ),
-            );
+            Console::vv('%s- found %s < %s', $indent, $a, $b);
 
             return -1;
         }
         if ($rule[0] === $b && $rule[1] === $a) {
-            Console::vv(
-                sprintf(
-                    '%s- found %s > %s',
-                    $indent,
-                    $a,
-                    $b,
-                ),
-            );
+            Console::vv('%s- found %s > %s', $indent, $a, $b);
 
             return 1;
         }
@@ -107,19 +86,13 @@ function compare($a, $b, $orderRules, $level = 0): int
         }
     }
 
-    Console::vv(
-        sprintf(
-            '- not found %s - %s',
-            $a,
-            $b,
-        ),
-    );
+    Console::vv('- not found %s - %s', $a, $b);
 
     return 0;
 }
 
 foreach ($printOrders as $printOrder) {
-    Console::v(sprintf('check print order %s', implode(',', $printOrder)));
+    Console::v('check print order %s', implode(',', $printOrder));
     $middle = floor(count($printOrder) / 2);
     for ($i = 0; $i < count($printOrder) - 1; $i++) {
         $pageA = $printOrder[$i];
@@ -139,11 +112,9 @@ foreach ($printOrders as $printOrder) {
 }
 
 Console::l(
-    sprintf(
-        'found %s / %s correct orders. middle page sum is %s (%s)',
-        count($correctPrintOrdersMiddlePage),
-        count($printOrders),
-        array_sum($correctPrintOrdersMiddlePage),
-        implode(',', $correctPrintOrdersMiddlePage),
-    ),
+    'found %s / %s correct orders. middle page sum is %s (%s)',
+    count($correctPrintOrdersMiddlePage),
+    count($printOrders),
+    array_sum($correctPrintOrdersMiddlePage),
+    implode(',', $correctPrintOrdersMiddlePage),
 );

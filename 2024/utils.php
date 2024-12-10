@@ -10,7 +10,10 @@ class Console
 
     static function init(): void
     {
-        $options = getopt('tv');
+        $options = getopt('tvh');
+        if (isset($options['h'])) {
+            self::help();
+        }
         if (isset($options['v'])) {
             self::$verbosity = $options['v'] === false ? 1 : count($options['v']);
         }
@@ -18,9 +21,22 @@ class Console
         self::$started = microtime(true);
     }
 
-    static function l(string $message): void
+    static function help(): void
     {
-        echo sprintf("%s\n", $message);
+        echo sprintf(
+            <<<TEXT
+                -v  verbosity levels (eg. -vv)
+                -t  run with test data
+                -h  show this help
+                TEXT,
+        );
+        echo PHP_EOL;
+        exit();
+    }
+
+    static function l(string $message, string|int ...$vars): void
+    {
+        echo sprintf("$message\n", ...$vars);
         self::v(
             sprintf(
                 "time: %s ms, peak memory: %s mb",
@@ -30,24 +46,24 @@ class Console
         );
     }
 
-    static function v(string $message): void
+    static function v(string $message, string|int ...$vars): void
     {
         if (self::$verbosity >= 1) {
-            echo sprintf("  %s\n", $message);
+            echo sprintf("  $message\n", ...$vars);
         }
     }
 
-    static function vv(string $message): void
+    static function vv(string $message, string|int ...$vars): void
     {
         if (self::$verbosity >= 2) {
-            echo sprintf("    %s\n", $message);
+            echo sprintf("    $message\n", ...$vars);
         }
     }
 
-    static function vvv(string $message): void
+    static function vvv(string $message, string|int ...$vars): void
     {
         if (self::$verbosity >= 3) {
-            echo sprintf("      %s\n", $message);
+            echo sprintf("      $message\n", ...$vars);
         }
     }
 

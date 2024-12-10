@@ -96,7 +96,7 @@ $checkLoop = function (array $potentialObstaclePosition) use (
     $leftRight,
     $crossroad,
 ): bool {
-    Console::vv(sprintf('Check loop with obstacle at %s, %s', $potentialObstaclePosition[0], $potentialObstaclePosition[1]));
+    Console::vv('Check loop with obstacle at %s, %s', $potentialObstaclePosition[0], $potentialObstaclePosition[1]);
 
     // mark obstacle
     $map[$potentialObstaclePosition[0]][$potentialObstaclePosition[1]] = $obstacle;
@@ -105,7 +105,7 @@ $checkLoop = function (array $potentialObstaclePosition) use (
     $track = [];
     do {
         if ( ! in_array($map[$position[0]][$position[1]], [$upDown, $leftRight, $crossroad])) {
-            Console::vvv(sprintf('Marked %s, %s as visited in direction %s', $position[0], $position[1], $direction->name()));
+            Console::vvv('Marked %s, %s as visited in direction %s', $position[0], $position[1], $direction->name());
             $map[$position[0]][$position[1]] = match ($direction) {
                 Direction::UP, Direction::DOWN => $upDown,
                 Direction::LEFT, Direction::RIGHT => $leftRight,
@@ -119,20 +119,18 @@ $checkLoop = function (array $potentialObstaclePosition) use (
         // loop? hit same pos in same dir?
         $distinctPositionId = sprintf('%s,%s,%s', $position[0], $position[1], $direction->name());
         if (array_key_exists($distinctPositionId, $track)) {
-            Console::vv(sprintf('LOOP: walked again on %s, %s in direction %s', $position[0], $position[1], $direction->name()));
+            Console::vv('LOOP: walked again on %s, %s in direction %s', $position[0], $position[1], $direction->name());
 
             Console::vvv(
-                sprintf(
-                    <<<TEXT
-                        The maaaaaap:
-                        %s
-                        TEXT,
-                    implode(
-                        PHP_EOL,
-                        array_map(
-                            fn($row) => implode('', $row),
-                            $map,
-                        ),
+                <<<TEXT
+                    The maaaaaap:
+                    %s
+                    TEXT,
+                implode(
+                    PHP_EOL,
+                    array_map(
+                        fn($row) => implode('', $row),
+                        $map,
                     ),
                 ),
             );
@@ -149,15 +147,7 @@ $checkLoop = function (array $potentialObstaclePosition) use (
 
         // out of bounds? there is nothing
         if ($nextPosition[0] < 0 || $nextPosition[1] < 0 || $nextPosition[0] > $mapSize[0] || $nextPosition[1] > $mapSize[1]) {
-            Console::vvv(
-                sprintf(
-                    'NOLOOP: left the map at %s, %s (map size %s, %s)',
-                    $position[0],
-                    $position[1],
-                    $mapSize[0],
-                    $mapSize[1],
-                ),
-            );
+            Console::vvv('NOLOOP: left the map at %s, %s (map size %s, %s)', $position[0], $position[1], $mapSize[0], $mapSize[1]);
 
             return false;
         }
@@ -167,13 +157,11 @@ $checkLoop = function (array $potentialObstaclePosition) use (
             $oldDirection = $direction;
             $direction = $direction->turnRight();
             Console::vvv(
-                sprintf(
-                    'Obstacle at %s, %s: turned from %s to %s',
-                    $nextPosition[0],
-                    $nextPosition[1],
-                    $oldDirection->name(),
-                    $direction->name(),
-                ),
+                'Obstacle at %s, %s: turned from %s to %s',
+                $nextPosition[0],
+                $nextPosition[1],
+                $oldDirection->name(),
+                $direction->name(),
             );
 
             continue;
@@ -190,7 +178,7 @@ $turns = 0;
 while (true) {
     // mark pos as visited and count
     if ( ! in_array($map[$position[0]][$position[1]], [$upDown, $leftRight, $crossroad])) {
-        Console::vv(sprintf('Marked %s, %s as visited', $position[0], $position[1]));
+        Console::vv('Marked %s, %s as visited', $position[0], $position[1]);
         $map[$position[0]][$position[1]] = match ($direction) {
             Direction::UP, Direction::DOWN => $upDown,
             Direction::LEFT, Direction::RIGHT => $leftRight,
@@ -210,7 +198,7 @@ while (true) {
 
     // out of bounds? leave
     if ($nextPosition[0] < 0 || $nextPosition[1] < 0 || $nextPosition[0] > $mapSize[0] || $nextPosition[1] > $mapSize[1]) {
-        Console::v(sprintf('Left the map at %s, %s (map size %s, %s)', $position[0], $position[1], $mapSize[0], $mapSize[1]));
+        Console::v('Left the map at %s, %s (map size %s, %s)', $position[0], $position[1], $mapSize[0], $mapSize[1]);
         break;
     }
 
@@ -235,12 +223,10 @@ while (true) {
     if ($checkLoop($nextPosition)) {
         $potentialObstacleId = sprintf('%s-%s', $nextPosition[0], $nextPosition[1]);
         Console::v(
-            sprintf(
-                'Potential obstacle at %s, %s%s',
-                $nextPosition[0],
-                $nextPosition[1],
-                array_key_exists($potentialObstacleId, $potentialObstacles) ? ' (already found)' : '',
-            ),
+            'Potential obstacle at %s, %s%s',
+            $nextPosition[0],
+            $nextPosition[1],
+            array_key_exists($potentialObstacleId, $potentialObstacles) ? ' (already found)' : '',
         );
         $potentialObstacles[$potentialObstacleId] = $nextPosition;
     }
@@ -248,17 +234,15 @@ while (true) {
     // walk
     $position = $nextPosition;
     $steps++;
-    Console::vv(sprintf('Walked to %s, %s', $position[0], $position[1]));
+    Console::vv('Walked to %s, %s', $position[0], $position[1]);
 }
 
 Console::l(
-    sprintf(
-        'Walked %s steps, turned %s times, visited %s distinct positions, found %s potential obstacles.',
-        $steps,
-        $turns,
-        $distinctPositions,
-        count($potentialObstacles),
-    ),
+    'Walked %s steps, turned %s times, visited %s distinct positions, found %s potential obstacles.',
+    $steps,
+    $turns,
+    $distinctPositions,
+    count($potentialObstacles),
 );
 
 // add potential obstacles

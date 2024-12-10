@@ -42,4 +42,4 @@ for ($i = 0; $i < count($left); $i++) {
     $similarity[] = $left[$i] * $found;
 }
 
-Console::l(sprintf('the similarity is %s', array_sum($similarity)));
+Console::l('the similarity is %s', array_sum($similarity));

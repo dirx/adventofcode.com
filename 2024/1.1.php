@@ -39,4 +39,4 @@ for ($i = 0; $i < count($left); $i++) {
     $distance[] = abs($left[$i] - $right[$i]);
 }
 
-Console::l(sprintf('the distance is %s', array_sum($distance)));
+Console::l('the distance is %s', array_sum($distance));

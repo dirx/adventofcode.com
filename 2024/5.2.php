@@ -59,38 +59,17 @@ foreach (explode("\n", $puzzle) as $i => $line) {
 
 $compare = function ($a, $b, $level = 0) use (&$compare, $orderRules): int {
     $indent = str_repeat(' ', $level * 2);
-    Console::vvv(
-        sprintf(
-            '%s- compare %s - %s',
-            $indent,
-            $a,
-            $b,
-        ),
-    );
+    Console::vvv('%s- compare %s - %s', $indent, $a, $b);
 
     $next = [];
     foreach ($orderRules as $rule) {
         if ($rule[0] === $a && $rule[1] === $b) {
-            Console::vvv(
-                sprintf(
-                    '%s- found %s < %s',
-                    $indent,
-                    $a,
-                    $b,
-                ),
-            );
+            Console::vvv('%s- found %s < %s', $indent, $a, $b);
 
             return -1;
         }
         if ($rule[0] === $b && $rule[1] === $a) {
-            Console::vvv(
-                sprintf(
-                    '%s- found %s > %s',
-                    $indent,
-                    $a,
-                    $b,
-                ),
-            );
+            Console::vvv('%s- found %s > %s', $indent, $a, $b);
 
             return 1;
         }
@@ -106,19 +85,13 @@ $compare = function ($a, $b, $level = 0) use (&$compare, $orderRules): int {
         }
     }
 
-    Console::vvv(
-        sprintf(
-            '- not found %s - %s',
-            $a,
-            $b,
-        ),
-    );
+    Console::vvv('- not found %s - %s', $a, $b);
 
     return 0;
 };
 
 foreach ($printOrders as $printOrder) {
-    Console::v(sprintf('check print order %s', implode(',', $printOrder)));
+    Console::v('check print order %s', implode(',', $printOrder));
     $middle = floor(count($printOrder) / 2);
     for ($i = 0; $i < count($printOrder) - 1; $i++) {
         $pageA = $printOrder[$i];
@@ -130,16 +103,16 @@ foreach ($printOrders as $printOrder) {
         } elseif ($result === 1) {
             Console::v('- fix incorrect');
             usort($printOrder, $compare);
-            Console::vv(sprintf('- corrected %s', implode(',', $printOrder)));
+            Console::vv('- corrected %s', implode(',', $printOrder));
             $correctPrintOrdersMiddlePage[] = $printOrder[$middle];
             break;
         } else {
-            Console::vv(sprintf('- correct %s, %s', $pageA, $pageB));
+            Console::vv('- correct %s, %s', $pageA, $pageB);
         }
     }
 }
 
-echo sprintf(
+Console::l(
     'corrected %s / %s orders. middle page sum is %s (%s)',
     count($correctPrintOrdersMiddlePage),
     count($printOrders),

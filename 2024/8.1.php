@@ -57,12 +57,12 @@ $distances = [];
 foreach ($nodes as $node => $nodePositions) {
     for ($i = 0; $i < count($nodePositions); $i++) {
         for ($j = $i + 1; $j < count($nodePositions); $j++) {
-            Console::v(sprintf('compare %s node %s to %s', $node, $i, $j));
+            Console::v('compare %s node %s to %s', $node, $i, $j);
             $distance = [
                 $nodePositions[$j][0] - $nodePositions[$i][0],
                 $nodePositions[$j][1] - $nodePositions[$i][1],
             ];
-            Console::vvv(sprintf('distance %s,%s - %s,%s = %s,%s', ...$nodePositions[$i], ...$nodePositions[$j], ...$distance));
+            Console::vvv('distance %s,%s - %s,%s = %s,%s', ...$nodePositions[$i], ...$nodePositions[$j], ...$distance);
             $distances[$node][] = $distance;
 
             foreach (
@@ -78,14 +78,14 @@ foreach ($nodes as $node => $nodePositions) {
                 ] as $antiNode
             ) {
                 if ($antiNode[0] < 0 || $antiNode[1] < 0 || $antiNode[0] > $mapSize[0] || $antiNode[1] > $mapSize[1]) {
-                    Console::vv(sprintf('skip - out of bounds anti node at %s,%s', ...$antiNode));
+                    Console::vv('skip - out of bounds anti node at %s,%s', ...$antiNode);
                     continue;
                 }
                 $antiNodeId = sprintf('%s-%s', ...$antiNode);
                 if (isset($antiNodes[$antiNodeId])) {
-                    Console::vv(sprintf('skip - already found anti node at %s,%s', ...$antiNode));
+                    Console::vv('skip - already found anti node at %s,%s', ...$antiNode);
                 } else {
-                    Console::v(sprintf('> found - anti node at %s,%s', ...$antiNode));
+                    Console::v('> found - anti node at %s,%s', ...$antiNode);
                     $antiNodes[$antiNodeId] = $antiNode;
                 }
             }
@@ -94,11 +94,9 @@ foreach ($nodes as $node => $nodePositions) {
 }
 
 Console::l(
-    sprintf(
-        'found %s distinct nodes, %s distinct anti nodes',
-        count($nodes),
-        count($antiNodes),
-    ),
+    'found %s distinct nodes, %s distinct anti nodes',
+    count($nodes),
+    count($antiNodes),
 );
 
 // mark anti nodes on map
