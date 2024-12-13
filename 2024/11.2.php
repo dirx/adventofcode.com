@@ -41,7 +41,7 @@ $blinkStone = function (int $stone): Generator {
 
 $index = [];
 $count = 0;
-$blinkRec = function ($stones, $max, $i = 0) use (&$count, &$index, &$blinkStone, &$blinkRec) {
+$blinkStones = function ($stones, $max, $i = 0) use (&$count, &$index, &$blinkStone, &$blinkStones) {
     if ($i === $max) {
         $count += iterator_count($stones);
         Console::v('count stones: %s, %s (max)', $count, $i);
@@ -58,13 +58,13 @@ $blinkRec = function ($stones, $max, $i = 0) use (&$count, &$index, &$blinkStone
         $out = $blinkStone($stone);
 
         $lastCount = $count;
-        $blinkRec($out, $max, $i + 1);
+        $blinkStones($out, $max, $i + 1);
 
         $index[$stone][$max - $i] = $count - $lastCount;
         Console::vv('add index stone %s, depth %s = %s', $stone, $max - $i, $index[$stone][$max - $i]);
     }
 };
 
-$blinkRec(new ArrayIterator($stones), $blinks);
+$blinkStones(new ArrayIterator($stones), $blinks);
 
 Console::l('%s stones after %s blinks', $count, $blinks);
