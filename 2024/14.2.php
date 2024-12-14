@@ -7,7 +7,7 @@ include(__DIR__ . "/utils.php");
 /**
  * https://adventofcode.com/2024/day/14
  *
- * strategy: move robots based on rules, if 50% are in the same quadrant we probably found it, play with % treshold
+ * strategy: move robots based on rules, if double the normal distribution are in the same block we probably find it, play with block grid size & treshold
  */
 
 if (Console::isTest()) {
@@ -51,44 +51,38 @@ $mapMiddle = [
     floor($mapSize[0] / 2),
     floor($mapSize[1] / 2),
 ];
-$quadrantTreshold = 0.5;
 
-$calcQuadrants = function (array $robots) use (&$mapMiddle): array {
-    $quadrants = [0 => 0, 1 => 0, 2 => 0, 3 => 0];
+$blockGridSize = 2; // 2 = quadrant
+$blockTreshold = 1 / $blockGridSize;
+
+$calcDistribution = function (array $robots, int $blockGridSize) use (&$mapSize): array {
+    $blocks = array_fill(0, pow($blockGridSize, 2), 0);
     foreach ($robots as $robot) {
-        $quadrant = match (true) {
-            $robot['position'][0] < $mapMiddle[0] && $robot['position'][1] < $mapMiddle[1] => 0,
-            $robot['position'][0] > $mapMiddle[0] && $robot['position'][1] < $mapMiddle[1] => 1,
-            $robot['position'][0] < $mapMiddle[0] && $robot['position'][1] > $mapMiddle[1] => 2,
-            $robot['position'][0] > $mapMiddle[0] && $robot['position'][1] > $mapMiddle[1] => 3,
-            default => null,
-        };
-        if ($quadrant === null) {
-            continue;
-        }
-
-        $quadrants[$quadrant]++;
+        $id = floor($blockGridSize * $robot['position'][0] / $mapSize[0])
+              + $blockGridSize * floor($blockGridSize * $robot['position'][1] / $mapSize[1]);
+        $blocks[$id]++;
     }
 
-    return $quadrants;
+    return $blocks;
 };
 
+$robotsStart = $robots;
+$robotsCount = count($robots);
 $seconds = 0;
 while (true) {
     foreach ($robots as $i => $robot) {
         $robots[$i]['position'] = [
-            ($mapSize[0] + $robot['position'][0] + $robot['velocity'][0]) % $mapSize[0],
-            ($mapSize[1] + $robot['position'][1] + $robot['velocity'][1]) % $mapSize[1],
+            ($seconds * $mapSize[0] + $robotsStart[$i]['position'][0] + $seconds * $robot['velocity'][0]) % $mapSize[0],
+            ($seconds * $mapSize[1] + $robotsStart[$i]['position'][1] + $seconds * $robot['velocity'][1]) % $mapSize[1],
         ];
     }
 
-    $quadrants = $calcQuadrants($robots);
-    $quadrantsSum = array_sum($quadrants);
-    foreach ($quadrants as $quadrant) {
-        if ($quadrant / $quadrantsSum > $quadrantTreshold) {
+    foreach ($calcDistribution($robots, $blockGridSize) as $block) {
+        if ($block / $robotsCount > $blockTreshold) {
             break 2;
         }
     }
+
     $seconds++;
 }
 
