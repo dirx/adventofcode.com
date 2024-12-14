@@ -34,7 +34,7 @@ class Console
         exit();
     }
 
-    static function l(string $message, string|int ...$vars): void
+    static function l(string $message, string|int|float ...$vars): void
     {
         echo sprintf("$message\n", ...$vars);
         self::v(
@@ -46,21 +46,21 @@ class Console
         );
     }
 
-    static function v(string $message, string|int ...$vars): void
+    static function v(string $message, string|int|float ...$vars): void
     {
         if (self::$verbosity >= 1) {
             echo sprintf("  $message\n", ...$vars);
         }
     }
 
-    static function vv(string $message, string|int ...$vars): void
+    static function vv(string $message, string|int|float ...$vars): void
     {
         if (self::$verbosity >= 2) {
             echo sprintf("    $message\n", ...$vars);
         }
     }
 
-    static function vvv(string $message, string|int ...$vars): void
+    static function vvv(string $message, string|int|float ...$vars): void
     {
         if (self::$verbosity >= 3) {
             echo sprintf("      $message\n", ...$vars);

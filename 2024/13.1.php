@@ -41,9 +41,9 @@ preg_match_all(
 );
 foreach ($matches as $match) {
     $machines[] = [
-        'A' => [intval($match[1]), intval($match[2])],
-        'B' => [intval($match[3]), intval($match[4])],
-        'P' => [intval($match[5]), intval($match[6])],
+        'A' => [(int)$match[1], (int)$match[2]],
+        'B' => [(int)$match[3], (int)$match[4]],
+        'P' => [(int)$match[5], (int)$match[6]],
     ];
 }
 $wins = [];
