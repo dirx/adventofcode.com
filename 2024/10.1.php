@@ -58,8 +58,8 @@ enum Direction
 
 $findTrailhead = function (int $column, int $row, int $height, array &$heads) use (&$findTrailhead, $map, $mapSize): void {
     foreach (Direction::cases() as $direction) {
-        $r = $row + $direction->value()[0];
-        $c = $column + $direction->value()[1];
+        $r = $row + $direction->offset()[0];
+        $c = $column + $direction->offset()[1];
 
         if ( ! isset($map[$r][$c]) || $map[$r][$c] !== $height) {
             continue;

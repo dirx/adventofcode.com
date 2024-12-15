@@ -97,8 +97,8 @@ while (true) {
 
     // calc next pos
     $nextPosition = [
-        $position[0] + $direction->value()[0],
-        $position[1] + $direction->value()[1],
+        $position[0] + $direction->offset()[0],
+        $position[1] + $direction->offset()[1],
     ];
 
     // out of bounds? leave

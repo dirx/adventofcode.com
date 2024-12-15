@@ -73,8 +73,8 @@ $findRegion = function (int $row, int $column, array $area = []) use (&$findRegi
     $sides[$row][$column] = 0;
     $directions = [];
     foreach (Direction::cases() as $direction) {
-        $c = $column + $direction->value()[0];
-        $r = $row + $direction->value()[1];
+        $c = $column + $direction->offset()[0];
+        $r = $row + $direction->offset()[1];
 
         if ( ! isset($map[$r][$c]) || $map[$r][$c] !== $map[$row][$column]) {
             $directions[$direction->name] = false;

@@ -71,6 +71,11 @@ class Console
     {
         return self::$test;
     }
+
+    static function verbosity(): int
+    {
+        return self::$verbosity;
+    }
 }
 
 Console::init();
