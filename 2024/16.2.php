@@ -77,11 +77,6 @@ enum Direction: string
     {
         return $this->turn(1);
     }
-
-    public function turnOpposite(): Direction
-    {
-        return $this->turn(2);
-    }
 }
 
 $maze = [];
@@ -161,15 +156,6 @@ $walkMaze = function (array $pos, Direction $direction, int $score = 0, array $p
             ],
             $direction->turnRight(),
             $score + 1001,
-            $path,
-        ),
-        $walkMaze(
-            [
-                $pos[0] + $direction->turnOpposite()->offset()[0],
-                $pos[1] + $direction->turnOpposite()->offset()[1],
-            ],
-            $direction->turnOpposite(),
-            $score + 2001,
             $path,
         ),
     );
