@@ -7,7 +7,7 @@ include(__DIR__ . "/utils.php");
 /**
  * https://adventofcode.com/2024/day/17
  *
- * strategy: walk possible paths recursively, calc and find min score on the way, remember visited pos & score to drop higher scored paths.
+ * strategy: use bitwise operators
  */
 
 if (Console::isTest()) {
@@ -39,7 +39,7 @@ foreach ($matches as $match) {
 }
 
 
-enum OPCODE: int
+enum Opcode: int
 {
     case adv = 0;
     case bxl = 1;
@@ -71,31 +71,43 @@ while (true) {
     $operand = $program[$pointer++];
 
     switch ($instruction) {
-        case OPCODE::adv:
-            $register['A'] = $register['A'] >> $combo($operand); // 2^
+        case Opcode::adv:
+            $register['A'] = $register['A'] >> $combo($operand);
             break;
-        case OPCODE::bxl:
-            $register['B'] = ($register['B'] ^ $operand);
+        case Opcode::bxl:
+            $register['B'] ^= $operand;
             break;
-        case OPCODE::bst:
-            $register['B'] = $combo($operand) & 7; // % 8;
+        case Opcode::bst:
+            $register['B'] = $combo($operand) & 7;
             break;
-        case OPCODE::jnz:
+        case Opcode::jnz:
             $pointer = $register['A'] === 0 ? $pointer : $operand;
             break;
-        case OPCODE::bxc:
-            $register['B'] = $register['B'] ^ $register['C'];
+        case Opcode::bxc:
+            $register['B'] ^= $register['C'];
             break;
-        case OPCODE::out:
-            $output[] = $combo($operand) & 7; // % 8;
+        case Opcode::out:
+            $output[] = $combo($operand) & 7;
             break;
-        case OPCODE::bdv:
-            $register['B'] = $register['A'] >> $combo($operand); // 2^
+        case Opcode::bdv:
+            $register['B'] = $register['A'] >> $combo($operand);
             break;
-        case OPCODE::cdv:
-            $register['C'] = $register['A'] >> $combo($operand); // 2^
+        case Opcode::cdv:
+            $register['C'] = $register['A'] >> $combo($operand);
             break;
     }
+    Console::v(
+        '%s, p: %s, i: %s %s:, o: %s, r: A=%s B=%s C=%s, out: %s',
+        $iterations,
+        $pointer,
+        $instruction->value,
+        $instruction->name,
+        $operand,
+        $register['A'],
+        $register['B'],
+        $register['C'],
+        implode(',', $output),
+    );
 
     if ($pointer >= $programLength) {
         break;
